@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Charts</title>
+    <style>
+        * {
+            margin: 0; 
+            padding: 0;
+        }
+        #app {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="app"></canvas>
+    <script>
+        const marginLeft = 40, marginBottom = 50;
+        const app = document.getElementById('app');
+        const context = app.getContext('2d');
+        app.width = 500;
+        app.height = 500;
+        // context.fillStyle = 'rgb(222,155,155)';
+        // context.fillRect(0,0,app.width,app.height);
+        // 线性渐变 start
+        const gradient = context.createLinearGradient(0,0, app.width, app.height);
+        // gradient.addColorStop(0, 'red');
+        // gradient.addColorStop(0.5, 'green');
+        // gradient.addColorStop(1, 'orange');
+        // context.fillStyle = gradient;
+        gradient.addColorStop(0  ,"rgb(100,200,155)")
+        gradient.addColorStop(0.5,"rgb(200,120,155)")
+        gradient.addColorStop(1.0,"rgb(200,220,255)")
+        context.fillStyle = gradient;
+        context.fillRect(0,0,app.width,app.height);
+        // 线性渐变 end
+        // 径向渐变 start
+        // const gradient = context.createRadialGradient(app.width/2, app.height/2, 20, app.width/2, app.height/2, 100)
+        // gradient.addColorStop(0  ,"rgb(100,200,155)")
+        // gradient.addColorStop(0.5,"rgb(200,120,155)")
+        // gradient.addColorStop(1.0,"rgb(00,120,105)")
+        // context.fillStyle = gradient;
+        // context.fillRect(0,0,app.width,app.height);
+        // 径向渐变 end
+        // context.beginPath();
+        // context.moveTo(10, 10);
+        // context.lineTo(10, 400);
+        // context.lineTo(100, 400);
+        // //设置线的颜色为渐变色
+        // const borderGradient = context.createLinearGradient(
+        //     0,
+        //     0, app.width, app.height);
+        // borderGradient.addColorStop(0, "red")
+        // borderGradient.addColorStop(0.8, "blue")
+        // borderGradient.addColorStop(1.0, "black")
+        // context.strokeStyle = borderGradient;
+        // context.stroke();
+        // context.translate(app.width/2, app.height/2);
+        // context.rotate(-Math.PI/180 * 90)
+        context.scale(1, -1);
+        context.translate(marginLeft, -app.height+marginBottom);
+        context.save();
+        context.lineWidth = .5;
+        // 沿x轴镜像，就相当于canvas.scale(1, -1),沿y轴镜像，就相当于canvas.scale(-1, 1),沿原点镜像，就相当于canvas.scale(-1, -1)
+        // x
+        // context.beginPath();
+        // context.moveTo(0, 0);
+        // context.lineTo(app.width, 0);
+        // context.closePath();
+        // context.stroke();
+        // y
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(0, app.height);
+        context.closePath();
+        context.stroke();
+        
+        // context.beginPath();
+        // context.arc(0, 0, 50, 0, getRadio(360), false); // false 顺时针 true逆时针
+        // context.fillStyle = 'red'
+        // context.fill();
+        // x轴
+        const ySpace = 50;
+        const len = Math.floor((app.height - marginBottom) / ySpace) ;
+        for(let i = 0; i < len; i++) {
+            context.beginPath();
+            context.moveTo(0, ySpace * i);
+            context.lineTo(app.width, ySpace * i);
+            context.closePath();
+            context.stroke();
+        }
+
+        // x 轴 刻度
+        const xLen = 40, xHeight = 10;
+        const lengthX = Math.floor((app.width - marginLeft)/xLen);
+        for(let i = 1; i <= lengthX; i++) {
+            context.beginPath();
+            context.moveTo(xLen * i, 0);
+            context.lineTo(xLen * i, xHeight);
+            context.closePath();
+            context.stroke();
+        }
+        context.save()
+        context.scale(1, -1);
+
+        const xTexts = new Array(lengthX+1).fill('吴建海');
+        for(let i = 1; i <= lengthX; i++) {
+            context.fillStyle = 'black'
+            const {width} = context.measureText(xTexts[i]);
+            context.fillText(xTexts[i], i*xLen - width/2, 10)
+        }
+        context.restore();
+        context.save()
+        context.scale(1, -1);
+        for(let i = 0; i < len; i++) {
+            context.fillStyle = 'black';
+            context.fillText(i*10, -20, -i*ySpace)
+        }
+        context.restore();
+        function getRadio(radio) {
+            // 0deg => 0 90deg => 0.5PI 180deg => 1PI 
+            // 0deg 为圆心的3点钟位置
+            return Math.PI/180 * radio
+        }
+
+
+        const currHeight = len * ySpace;
+        const currWidth = app.width - marginLeft;
+        const total = len * 10;
+        const y1 = currHeight / total;
+        console.log(y1);
+        const arr = [];
+        for (let index = 0; index < lengthX+1; index++) {
+            arr[index] = parseInt(Math.random() * 80 + 1)
+        }
+        console.log(arr);
+        // context.moveTo(0, 0);
+        context.lineWidth = 1;
+        for(let i = 0; i < arr.length; i++) {
+            const y = y1*arr[i];
+            const x = xLen * (i+1);
+            if(i === 0) {
+                context.moveTo(x, y);
+            }else {
+                context.lineTo(x, y);
+            }
+        }
+        context.stroke();
+        for(let i = 0; i < arr.length; i++) {
+            const y = y1*arr[i];
+            const x = xLen * (i+1);
+            context.beginPath()
+            context.arc(x, y, 5, 0, Math.PI*2, true);
+            context.fillStyle = 'black';
+            context.fill();
+        }
+    </script>
+</body>
+</html>
