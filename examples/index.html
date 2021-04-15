@@ -139,36 +139,78 @@
         }
         console.log(arr);
         // context.moveTo(0, 0);
-        context.lineWidth = 1;
-        for(let i = 0; i < arr.length; i++) {
-            const y = y1*arr[i];
-            const x = xLen * (i+1);
-            if(i === 0) {
-                context.moveTo(x, y);
-            }else {
-                context.lineTo(x, y);
+        
+        drawLine(context, arr);
+        function drawLine(context, arr) {
+            context.strokeStyle = 'rgba(93,111,194,0.5)';
+            context.beginPath();
+            context.lineWidth = 1;
+            for(let i = 0; i < arr.length; i++) {
+                const y = y1*arr[i];
+                const x = xLen * (i+1);
+                // context.beginPath();
+
+                if(i === 0) {
+                    context.moveTo(x, y);
+                }else {
+                    context.lineTo(x, y);
+                }
+
+                if(i === arr.length -1) {
+                    context.lineTo(x, 0);
+                    context.lineTo(xLen, 0);
+                    context.closePath();
+                    context.fillStyle = 'rgba(93,111,194,0.5)';
+                    context.shadowBlur = 20;
+                    context.fill();
+                    context.stroke();
+                }
+                // const x = xLen * (i+1);
+                // const y = 2 * x + 1;
+                // if(i === 0) {
+                //     context.moveTo(x, y);
+                // }else {
+                //     context.lineTo(x, y);
+                // }
             }
-            // const x = xLen * (i+1);
-            // const y = 2 * x + 1;
-            // if(i === 0) {
-            //     context.moveTo(x, y);
-            // }else {
-            //     context.lineTo(x, y);
-            // }
-        }
-        context.stroke();
-        for(let i = 0; i < arr.length; i++) {
-            const y = y1*arr[i];
-            const x = xLen * (i+1);
-            context.beginPath()
-            context.arc(x, y, 5, 0, Math.PI*2, true);
-            context.fillStyle = 'black';
-            context.fill();
+            // context.quadraticCurveTo()
+            // const LineGradient = context.createLinearGradient(0,0, app.width, app.height);
+            // // gradient.addColorStop(0, 'red');
+            // // gradient.addColorStop(0.5, 'green');
+            // // gradient.addColorStop(1, 'orange');
+            // // context.fillStyle = gradient;
+            // LineGradient.addColorStop(0  ,"rgb(100,200,155)")
+            // LineGradient.addColorStop(0.5,"rgb(200,120,155)")
+            // LineGradient.addColorStop(1.0,"rgb(200,220,255)")
+            // context.fillStyle = LineGradient;
+            // context.fill();
+            context.stroke();
+            for(let i = 0; i < arr.length; i++) {
+                const y = y1*arr[i];
+                const x = xLen * (i+1);
+                context.beginPath()
+                context.arc(x, y, 5, 0, Math.PI*2, true);
+                context.fill();
+                context.stroke();
+                context.save();
+                context.scale(1, -1);
+                context.fillStyle = 'black';
+                context.beginPath();
+                const {width} = context.measureText(arr[i]);
+                context.fillText(arr[i], x - width,  - y - 10)
+                context.restore()
+            }
         }
 
 
 
         // y = 2x + 1
+
+
+        // (x-10)2+(y-10)2=1602 圆
+
+        // 线性贝塞尔曲线
+        // 
 
     </script>
 </body>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贝塞尔曲线</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            display: block;
+            margin: 30px auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="app"></canvas>
+    <script>
+        app.width = 500;
+        app.height = 500;
+        const context = app.getContext('2d');
+        context.fillStyle = '#ccc';
+        context.rect(0,0, 500, 500);
+        context.fill();
+        context.strokeStyle = 'red';
+        app.onmousemove = function(e) {
+            // console.log(e.clientX, e.clientY, app.offsetLeft, app.offsetTop);
+            const x = e.clientX - app.offsetLeft;
+            const y = e.clientY - app.offsetTop;
+            console.log(x, y)
+            if(x >=0 && x <= 500 && y >= 0 && y <= 500) {
+                context.clearRect(0,0,500,500)
+                // context.fillStyle = '#ccc';
+                // context.rect(0,0, 500, 500);
+                // context.fill();
+                context.beginPath()
+                context.moveTo(0, 200);
+                // 二次方贝兹曲线
+                // 75,50 为控制点 300,200 为曲线重点 moveTo为起点
+                context.quadraticCurveTo(x,y, 300, 200);
+                // context.globalCompositeOperation = 'source-over';
+                context.stroke();
+                rokeStyle = 'blue';
+                context.beginPath()
+                context.moveTo(0, 200);
+                context.lineTo(x, y);
+                context.moveTo(x, y);
+                context.lineTo(300, 200);
+
+                context.stroke();
+                
+            }
+            
+        }
+
+ 
+
+        // context.beginPath()
+        // context.moveTo(0, 200);
+        // // 二次方贝兹曲线
+        // // 75,50 为控制点 300,200 为曲线重点 moveTo为起点
+        // context.quadraticCurveTo(75, 50, 300, 200);
+        // // context.globalCompositeOperation = 'source-over';
+        // context.stroke();
+
+        context.strokeStyle = 'blue';
+        context.beginPath()
+        context.moveTo(0, 200);
+        context.lineTo(75,50);
+        context.moveTo(75,50);
+        context.lineTo(300, 200);
+
+        context.stroke();
+    </script>
+</body>
+</html>

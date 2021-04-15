@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Charts</title>
+    <style>
+        * {
+            margin: 0; 
+            padding: 0;
+        }
+        #app {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="app"></canvas>
+    <script>
+        const marginLeft = 40, marginBottom = 50;
+        const app = document.getElementById('app');
+        const context = app.getContext('2d');
+        app.width = 500;
+        app.height = 500;
+        // context.fillStyle = 'rgb(222,155,155)';
+        // context.fillRect(0,0,app.width,app.height);
+        // 线性渐变 start
+        const gradient = context.createLinearGradient(0,0, app.width, app.height);
+        // gradient.addColorStop(0, 'red');
+        // gradient.addColorStop(0.5, 'green');
+        // gradient.addColorStop(1, 'orange');
+        // context.fillStyle = gradient;
+        gradient.addColorStop(0  ,"rgb(100,200,155)")
+        gradient.addColorStop(0.5,"rgb(200,120,155)")
+        gradient.addColorStop(1.0,"rgb(200,220,255)")
+        context.fillStyle = gradient;
+        context.fillRect(0,0,app.width,app.height);
+        context.scale(1, -1);
+        context.translate(marginLeft, -app.height+marginBottom);
+        drawQuaraticLine(context);
+        
+        function drawQuaraticLine(context) {
+            class Point {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+            //绘制折线段
+            const widthOfOn = (app.width - marginLeft) / 7
+            const danweiHeight=35/50;//每个数字占用的实际像素高度
+            const point01 = new Point(widthOfOn/2,150*danweiHeight);
+            const point02 = new Point(widthOfOn/2+widthOfOn,250*danweiHeight);
+            const point03 = new Point(widthOfOn/2+widthOfOn*2,225*danweiHeight);
+            const point04 = new Point(widthOfOn/2+widthOfOn*3,211*danweiHeight);
+            const point05 = new Point(widthOfOn/2+widthOfOn*4,140*danweiHeight);
+            const point06 = new Point(widthOfOn/2+widthOfOn*5,148*danweiHeight);
+            const point07 = new Point(widthOfOn/2+widthOfOn*6,260*danweiHeight);
+
+
+            const dataList = [point01, point02, point03, point04, point05, point06, point07];
+            context.save();
+            context.beginPath();
+            context.lineTo(point01.x,point01.y)
+            //500=grid_width-40 每个单位的长度的=像素长度
+            const danweiX = widthOfOn;
+            const grid_width=widthOfOn;
+            const xMoveDistance=20
+            const yMoveDistance=30
+            for (let index = 0;index < dataList.length-1;index++) {
+                if (dataList[index] === dataList[index + 1]) {
+                    context.lineTo(danweiX*(index+1),0)
+                } else if(dataList[index] < dataList[index + 1]){//y1<y2情况
+                    const centerX=(grid_width * index + grid_width * (1 + index)) / 2
+                    const centerY=(dataList[index].y + dataList[index + 1].y) / 2
+                    const controX0=(grid_width * index+centerX)/2
+                    const controY0=(dataList[index].y+centerY)/2
+                    const controX1=(centerX+ grid_width * (1 + index))/2
+                    const controY1=(centerY+dataList[index+1].y)/2
+                    context.bezierCurveTo(controX0+xMoveDistance,controY0-yMoveDistance,controX1-xMoveDistance,controY1+yMoveDistance,grid_width * (1 + index),dataList[index + 1].y)
+                }else{
+                    const centerX=(grid_width * index + grid_width * (1 + index)) / 2
+                    const centerY=(dataList[index].y + dataList[index + 1].y) / 2
+                    const controX0=(grid_width * index+centerX)/2
+                    const controY0=(dataList[index].y+centerY)/2
+                    const controX1=(centerX+ grid_width * (1 + index))/2
+                    const controY1=(centerY+dataList[index+1].y)/2
+                    context.bezierCurveTo(controX0+xMoveDistance,controY0+yMoveDistance,controX1-xMoveDistance,controY1-yMoveDistance,grid_width * (1 + index),dataList[index + 1].y)
+                }
+            }
+            context.strokeStyle="rgb(93,111,194)"
+            context.lineWidth=2
+            context.shadowBlur = 5;
+            context.stroke();
+            context.closePath();
+            context.restore();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贝塞尔曲线</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            display: block;
+            margin: 30px auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="app"></canvas>
+    <script>
+        app.width = 500;
+        app.height = 500;
+        const context = app.getContext('2d');
+        context.strokeStyle = 'red';
+        context.beginPath();
+        context.moveTo(10, 400);
+        // 10, 100 为 控制点1 310， 100为控制点2 310,400为终点
+        context.bezierCurveTo(10, 100, 310, 100, 310, 400);
+        context.stroke();
+
+        context.strokeStyle = 'blue';
+        context.beginPath();
+        context.moveTo(10, 400);
+        context.lineTo(10, 100);
+        context.lineTo(310, 100);
+        context.lineTo(310, 400);
+        context.stroke();
+    </script>
+</body>
+</html>
